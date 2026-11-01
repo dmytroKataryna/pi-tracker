@@ -1,0 +1,2 @@
+/usr/bin/ar qc libpitracker_camera.a CMakeFiles/pitracker_camera.dir/src/camera_capture.cpp.o
+/usr/bin/ranlib libpitracker_camera.a

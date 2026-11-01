@@ -1,0 +1,200 @@
+[
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/pitracker.dir/src/fd.cpp.o -c /home/rasp001/pi-tracker/src/fd.cpp",
+  "file": "/home/rasp001/pi-tracker/src/fd.cpp",
+  "output": "CMakeFiles/pitracker.dir/src/fd.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/pitracker.dir/src/i2c_device.cpp.o -c /home/rasp001/pi-tracker/src/i2c_device.cpp",
+  "file": "/home/rasp001/pi-tracker/src/i2c_device.cpp",
+  "output": "CMakeFiles/pitracker.dir/src/i2c_device.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/pitracker.dir/src/imu.cpp.o -c /home/rasp001/pi-tracker/src/imu.cpp",
+  "file": "/home/rasp001/pi-tracker/src/imu.cpp",
+  "output": "CMakeFiles/pitracker.dir/src/imu.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/pitracker.dir/src/mapped_buffer.cpp.o -c /home/rasp001/pi-tracker/src/mapped_buffer.cpp",
+  "file": "/home/rasp001/pi-tracker/src/mapped_buffer.cpp",
+  "output": "CMakeFiles/pitracker.dir/src/mapped_buffer.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/pitracker.dir/src/serial_port.cpp.o -c /home/rasp001/pi-tracker/src/serial_port.cpp",
+  "file": "/home/rasp001/pi-tracker/src/serial_port.cpp",
+  "output": "CMakeFiles/pitracker.dir/src/serial_port.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/pitracker.dir/src/tf_luna.cpp.o -c /home/rasp001/pi-tracker/src/tf_luna.cpp",
+  "file": "/home/rasp001/pi-tracker/src/tf_luna.cpp",
+  "output": "CMakeFiles/pitracker.dir/src/tf_luna.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/pitracker.dir/src/udp_sender.cpp.o -c /home/rasp001/pi-tracker/src/udp_sender.cpp",
+  "file": "/home/rasp001/pi-tracker/src/udp_sender.cpp",
+  "output": "CMakeFiles/pitracker.dir/src/udp_sender.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/pitracker.dir/src/yuv420.cpp.o -c /home/rasp001/pi-tracker/src/yuv420.cpp",
+  "file": "/home/rasp001/pi-tracker/src/yuv420.cpp",
+  "output": "CMakeFiles/pitracker.dir/src/yuv420.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -isystem /usr/include/libcamera -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/pitracker_camera.dir/src/camera_capture.cpp.o -c /home/rasp001/pi-tracker/src/camera_capture.cpp",
+  "file": "/home/rasp001/pi-tracker/src/camera_capture.cpp",
+  "output": "CMakeFiles/pitracker_camera.dir/src/camera_capture.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++   -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/hello.dir/src/main.cpp.o -c /home/rasp001/pi-tracker/src/main.cpp",
+  "file": "/home/rasp001/pi-tracker/src/main.cpp",
+  "output": "CMakeFiles/hello.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/sensord.dir/apps/sensord.cpp.o -c /home/rasp001/pi-tracker/apps/sensord.cpp",
+  "file": "/home/rasp001/pi-tracker/apps/sensord.cpp",
+  "output": "CMakeFiles/sensord.dir/apps/sensord.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/ch2_8_files.dir/sandbox/ch2_8_files.cpp.o -c /home/rasp001/pi-tracker/sandbox/ch2_8_files.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/ch2_8_files.cpp",
+  "output": "CMakeFiles/ch2_8_files.dir/sandbox/ch2_8_files.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/ch2_8_files.dir/sandbox/helper/ch2_8_get_integer.cpp.o -c /home/rasp001/pi-tracker/sandbox/helper/ch2_8_get_integer.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/helper/ch2_8_get_integer.cpp",
+  "output": "CMakeFiles/ch2_8_files.dir/sandbox/helper/ch2_8_get_integer.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day02_stats.dir/sandbox/day02_stats.cpp.o -c /home/rasp001/pi-tracker/sandbox/day02_stats.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day02_stats.cpp",
+  "output": "CMakeFiles/day02_stats.dir/sandbox/day02_stats.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day03_imu.dir/sandbox/day03_imu.cpp.o -c /home/rasp001/pi-tracker/sandbox/day03_imu.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day03_imu.cpp",
+  "output": "CMakeFiles/day03_imu.dir/sandbox/day03_imu.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day03_refs.dir/sandbox/day03_refs.cpp.o -c /home/rasp001/pi-tracker/sandbox/day03_refs.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day03_refs.cpp",
+  "output": "CMakeFiles/day03_refs.dir/sandbox/day03_refs.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day04_fd.dir/sandbox/day04_fd.cpp.o -c /home/rasp001/pi-tracker/sandbox/day04_fd.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day04_fd.cpp",
+  "output": "CMakeFiles/day04_fd.dir/sandbox/day04_fd.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day04_leak.dir/sandbox/day04_leak.cpp.o -c /home/rasp001/pi-tracker/sandbox/day04_leak.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day04_leak.cpp",
+  "output": "CMakeFiles/day04_leak.dir/sandbox/day04_leak.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day04_log.dir/sandbox/day04_log.cpp.o -c /home/rasp001/pi-tracker/sandbox/day04_log.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day04_log.cpp",
+  "output": "CMakeFiles/day04_log.dir/sandbox/day04_log.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day05_fd.dir/sandbox/day05_fd.cpp.o -c /home/rasp001/pi-tracker/sandbox/day05_fd.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day05_fd.cpp",
+  "output": "CMakeFiles/day05_fd.dir/sandbox/day05_fd.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day05_ring.dir/sandbox/day05_ring.cpp.o -c /home/rasp001/pi-tracker/sandbox/day05_ring.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day05_ring.cpp",
+  "output": "CMakeFiles/day05_ring.dir/sandbox/day05_ring.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day06_errors.dir/sandbox/day06_errors.cpp.o -c /home/rasp001/pi-tracker/sandbox/day06_errors.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day06_errors.cpp",
+  "output": "CMakeFiles/day06_errors.dir/sandbox/day06_errors.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day06_log.dir/sandbox/day06_log.cpp.o -c /home/rasp001/pi-tracker/sandbox/day06_log.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day06_log.cpp",
+  "output": "CMakeFiles/day06_log.dir/sandbox/day06_log.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day06_stl.dir/sandbox/day06_stl.cpp.o -c /home/rasp001/pi-tracker/sandbox/day06_stl.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day06_stl.cpp",
+  "output": "CMakeFiles/day06_stl.dir/sandbox/day06_stl.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day07_pipeline.dir/sandbox/day07_pipeline.cpp.o -c /home/rasp001/pi-tracker/sandbox/day07_pipeline.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day07_pipeline.cpp",
+  "output": "CMakeFiles/day07_pipeline.dir/sandbox/day07_pipeline.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day07_race.dir/sandbox/day07_race.cpp.o -c /home/rasp001/pi-tracker/sandbox/day07_race.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day07_race.cpp",
+  "output": "CMakeFiles/day07_race.dir/sandbox/day07_race.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day09_imu.dir/sandbox/day09_imu.cpp.o -c /home/rasp001/pi-tracker/sandbox/day09_imu.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day09_imu.cpp",
+  "output": "CMakeFiles/day09_imu.dir/sandbox/day09_imu.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day09_light.dir/sandbox/day09_light.cpp.o -c /home/rasp001/pi-tracker/sandbox/day09_light.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day09_light.cpp",
+  "output": "CMakeFiles/day09_light.dir/sandbox/day09_light.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day10_imu_logger.dir/sandbox/day10_imu_logger.cpp.o -c /home/rasp001/pi-tracker/sandbox/day10_imu_logger.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day10_imu_logger.cpp",
+  "output": "CMakeFiles/day10_imu_logger.dir/sandbox/day10_imu_logger.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day12_lidar.dir/sandbox/day12_lidar.cpp.o -c /home/rasp001/pi-tracker/sandbox/day12_lidar.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day12_lidar.cpp",
+  "output": "CMakeFiles/day12_lidar.dir/sandbox/day12_lidar.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day12_parser_test.dir/sandbox/day12_parser_test.cpp.o -c /home/rasp001/pi-tracker/sandbox/day12_parser_test.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day12_parser_test.cpp",
+  "output": "CMakeFiles/day12_parser_test.dir/sandbox/day12_parser_test.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day15_yuv.dir/sandbox/day15_yuv.cpp.o -c /home/rasp001/pi-tracker/sandbox/day15_yuv.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day15_yuv.cpp",
+  "output": "CMakeFiles/day15_yuv.dir/sandbox/day15_yuv.cpp.o"
+},
+{
+  "directory": "/home/rasp001/pi-tracker/build-release",
+  "command": "/usr/bin/c++  -I/home/rasp001/pi-tracker/include -isystem /usr/include/libcamera -O3 -DNDEBUG -std=gnu++20 -Wall -Wextra -Wpedantic -Wconversion -o CMakeFiles/day16_capture.dir/sandbox/day16_capture.cpp.o -c /home/rasp001/pi-tracker/sandbox/day16_capture.cpp",
+  "file": "/home/rasp001/pi-tracker/sandbox/day16_capture.cpp",
+  "output": "CMakeFiles/day16_capture.dir/sandbox/day16_capture.cpp.o"
+}
+]

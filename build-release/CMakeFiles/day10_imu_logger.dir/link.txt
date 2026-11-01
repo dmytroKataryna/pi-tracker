@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/day10_imu_logger.dir/link.d CMakeFiles/day10_imu_logger.dir/sandbox/day10_imu_logger.cpp.o -o day10_imu_logger  libpitracker.a

@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/day07_pipeline.dir/link.d CMakeFiles/day07_pipeline.dir/sandbox/day07_pipeline.cpp.o -o day07_pipeline  libpitracker.a

@@ -4,3 +4,4 @@ build-debug/
 *.yuv 
 *.pgm
 *.png
+*.jpg

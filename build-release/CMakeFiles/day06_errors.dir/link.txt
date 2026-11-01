@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/day06_errors.dir/link.d CMakeFiles/day06_errors.dir/sandbox/day06_errors.cpp.o -o day06_errors  libpitracker.a

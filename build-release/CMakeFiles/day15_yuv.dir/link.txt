@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/day15_yuv.dir/link.d CMakeFiles/day15_yuv.dir/sandbox/day15_yuv.cpp.o -o day15_yuv  libpitracker.a
