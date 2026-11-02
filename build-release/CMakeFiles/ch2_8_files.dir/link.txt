@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/ch2_8_files.dir/link.d CMakeFiles/ch2_8_files.dir/sandbox/ch2_8_files.cpp.o CMakeFiles/ch2_8_files.dir/sandbox/helper/ch2_8_get_integer.cpp.o -o ch2_8_files  libpitracker.a

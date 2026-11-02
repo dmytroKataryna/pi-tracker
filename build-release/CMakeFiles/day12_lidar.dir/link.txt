@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/day12_lidar.dir/link.d CMakeFiles/day12_lidar.dir/sandbox/day12_lidar.cpp.o -o day12_lidar  libpitracker.a

@@ -1,2 +1,0 @@
-/usr/bin/ar qc libpitracker.a CMakeFiles/pitracker.dir/src/fd.cpp.o CMakeFiles/pitracker.dir/src/i2c_device.cpp.o CMakeFiles/pitracker.dir/src/imu.cpp.o CMakeFiles/pitracker.dir/src/mapped_buffer.cpp.o CMakeFiles/pitracker.dir/src/serial_port.cpp.o CMakeFiles/pitracker.dir/src/tf_luna.cpp.o CMakeFiles/pitracker.dir/src/udp_sender.cpp.o CMakeFiles/pitracker.dir/src/yuv420.cpp.o
-/usr/bin/ranlib libpitracker.a

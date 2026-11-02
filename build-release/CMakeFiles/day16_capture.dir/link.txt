@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/day16_capture.dir/link.d CMakeFiles/day16_capture.dir/sandbox/day16_capture.cpp.o -o day16_capture  libpitracker.a libpitracker_camera.a libpitracker.a /usr/lib/aarch64-linux-gnu/libcamera.so /usr/lib/aarch64-linux-gnu/libcamera-base.so

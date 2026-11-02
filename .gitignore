@@ -1,7 +1,11 @@
 build/
 .vscode/
+build*/
 build-debug/
+build-check/
+build-release/
 *.yuv 
 *.pgm
 *.png
 *.jpg
+*.h264

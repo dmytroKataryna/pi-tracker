@@ -16,6 +16,7 @@ add_library(pitracker
     src/tf_luna.cpp
     src/udp_sender.cpp
     src/yuv420.cpp
+    src/h264_nal.cpp
 )
 
 target_link_libraries(pitracker PUBLIC Threads::Threads)

@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/day04_leak.dir/link.d CMakeFiles/day04_leak.dir/sandbox/day04_leak.cpp.o -o day04_leak  libpitracker.a

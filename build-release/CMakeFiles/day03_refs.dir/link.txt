@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/day03_refs.dir/link.d CMakeFiles/day03_refs.dir/sandbox/day03_refs.cpp.o -o day03_refs  libpitracker.a
