@@ -31,6 +31,7 @@ deploy/               systemd unit and its configuration file
 sandbox/              daily exercises (dayNN_*.cpp), each built as its own executable
 data/                 recorded sensor logs and logic analyzer captures
 docs/buses.md         notes on UART / I2C / SPI
+docs/video.md         notes on H.264, RTP and GStreamer (video streaming)
 ```
 
 ## Build
