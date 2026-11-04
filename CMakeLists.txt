@@ -34,6 +34,11 @@ add_executable(hello src/main.cpp)
 add_executable(sensord apps/sensord.cpp)
 target_link_libraries(sensord PRIVATE pitracker)
 
+# GStreamer: окрема бібліотека, щоб sensord і камера не залежали від нього
+pkg_check_modules(GST REQUIRED IMPORTED_TARGET gstreamer-1.0 gstreamer-app-1.0)
+add_library(pitracker_video src/h264_streamer.cpp)
+
+
 file(GLOB SANDBOX_SOURCES CONFIGURE_DEPENDS sandbox/*.cpp)
 foreach(src ${SANDBOX_SOURCES})
     get_filename_component(name ${src} NAME_WE)
@@ -45,3 +50,6 @@ target_sources(ch2_8_files PRIVATE sandbox/helper/ch2_8_get_integer.cpp)
 target_link_libraries(day16_capture PRIVATE pitracker_camera)
 
 install(TARGETS sensord RUNTIME DESTINATION bin)
+
+target_link_libraries(pitracker_video PUBLIC pitracker PkgConfig::GST)
+target_link_libraries(day18_stream PRIVATE pitracker_camera pitracker_video)
