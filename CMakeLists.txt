@@ -53,3 +53,11 @@ install(TARGETS sensord RUNTIME DESTINATION bin)
 
 target_link_libraries(pitracker_video PUBLIC pitracker PkgConfig::GST)
 target_link_libraries(day18_stream PRIVATE pitracker_camera pitracker_video)
+
+# OpenCV: окрема бібліотека, щоб решта проєкту від нього не залежала
+find_package(OpenCV REQUIRED COMPONENTS core imgproc objdetect imgcodecs)
+add_library(pitracker_vision src/marker_detector.cpp)
+target_link_libraries(pitracker_vision PUBLIC pitracker ${OpenCV_LIBS})
+target_link_libraries(day19_marker_test PRIVATE pitracker_vision)
+target_link_libraries(day19_marker_gen PRIVATE pitracker_vision)
+target_link_libraries(day19_aruco PRIVATE pitracker_camera pitracker_vision)
