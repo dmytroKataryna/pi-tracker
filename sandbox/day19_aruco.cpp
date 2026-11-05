@@ -1,4 +1,5 @@
 #include "pi_tracker/camera_capture.h"
+#include "pi_tracker/follow.h"
 #include "pi_tracker/marker_detector.h"
 #include "pi_tracker/thread_safe_queue.h"
 #include "pi_tracker/yuv420.h"
@@ -76,9 +77,13 @@ namespace
         }
     }
 
-    std::string describe(const pi_tracker::Marker &m)
+    std::string describe(const pi_tracker::Marker &m, const pi_tracker::DistanceCalibration &calibration)
     {
-        return std::format("id {}: offset x {:+.2f} y {:+.2f}, side {:.0f} px", m.id, m.offset.x, m.offset.y, m.sidePx);
+        const std::optional<float> distance = pi_tracker::estimateDistanceCm(m.sidePx, calibration);
+        const pi_tracker::FollowCommand command = pi_tracker::followMarker(m, distance);
+        const std::string distanceText = distance ? std::format("{:.0f} cm", *distance) : "? cm";
+        return std::format("id {}: offset x {:+.2f} y {:+.2f}, side {:.0f} px, {} -> yaw {:+.0f} deg/s, forward {:+.2f} m/s",
+                           m.id, m.offset.x, m.offset.y, m.sidePx, distanceText, command.yawRateDegS, command.forwardMS);
     }
 
 } // namespace
@@ -86,6 +91,9 @@ namespace
 int main(int argc, char *argv[])
 {
     const int seconds = argc > 1 ? std::stoi(argv[1]) : 0; // 0 — до Ctrl+C
+    // ./day19_aruco 0 50 302: маркер на 50 см мав 302 px. Без цих двох чисел відстань невідома
+    const pi_tracker::DistanceCalibration calibration{argc > 3 ? std::stof(argv[2]) : 0.0f,
+                                                      argc > 3 ? std::stof(argv[3]) : 0.0f};
 
     std::signal(SIGINT, onSignal);
     std::signal(SIGTERM, onSignal);
@@ -137,7 +145,7 @@ int main(int argc, char *argv[])
                 std::string seen = "no marker";
                 if (!last->markers.empty())
                 {
-                    seen = describe(last->markers.front());
+                    seen = describe(last->markers.front(), calibration);
                     if (last->markers.size() > 1)
                     {
                         seen += std::format(" (+{} more)", last->markers.size() - 1);

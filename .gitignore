@@ -1,4 +1,6 @@
 build/
+tmp/
+tmp/*
 .vscode/
 build*/
 build-debug/
