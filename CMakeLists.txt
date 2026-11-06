@@ -62,3 +62,10 @@ target_link_libraries(day19_marker_test PRIVATE pitracker_vision)
 target_link_libraries(day19_marker_gen PRIVATE pitracker_vision)
 target_link_libraries(day19_aruco PRIVATE pitracker_camera pitracker_vision)
 target_link_libraries(day19_follow_test PRIVATE pitracker_vision)
+
+# Hailo: окрема бібліотека, щоб решта проєкту не залежала від NPU
+find_package(HailoRT REQUIRED)
+add_library(pitracker_npu src/hailo_detector.cpp)
+target_link_libraries(pitracker_npu PUBLIC pitracker HailoRT::libhailort)
+target_link_libraries(day20_nms_test PRIVATE pitracker_npu)
+target_link_libraries(day20_npu PRIVATE pitracker_camera pitracker_npu pitracker_vision)

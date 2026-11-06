@@ -11,3 +11,4 @@ build-release/
 *.png
 *.jpg
 *.h264
+hailort.log
