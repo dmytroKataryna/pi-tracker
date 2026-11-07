@@ -32,6 +32,7 @@ sandbox/              daily exercises (dayNN_*.cpp), each built as its own execu
 data/                 recorded sensor logs and logic analyzer captures
 docs/buses.md         notes on UART / I2C / SPI
 docs/video.md         notes on H.264, RTP and GStreamer (video streaming)
+docs/debugging.md     notes on optimization levels, UB and debugging tools
 ```
 
 ## Build
