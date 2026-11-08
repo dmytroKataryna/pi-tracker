@@ -12,3 +12,4 @@ build-release/
 *.jpg
 *.h264
 hailort.log
+.cache/
