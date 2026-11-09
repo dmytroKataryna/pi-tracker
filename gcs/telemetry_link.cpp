@@ -13,6 +13,7 @@ namespace mav = pi_tracker::mavlink;
 TelemetryLink::TelemetryLink(quint16 port, QObject *parent)
     : QObject{parent}, m_socket{new QUdpSocket{this}},
       m_linkTimer{new QTimer{this}} {
+
   if (!m_socket->bind(QHostAddress::AnyIPv4, port)) {
     throw std::runtime_error("bind UDP " + std::to_string(port) + ": " +
                              m_socket->errorString().toStdString());
@@ -23,7 +24,6 @@ TelemetryLink::TelemetryLink(quint16 port, QObject *parent)
 
   m_linkTimer->setSingleShot(true);
   m_linkTimer->setInterval(3000);
-
 
   QObject::connect(m_linkTimer, &QTimer::timeout, this,
                    &TelemetryLink::linkLost);
