@@ -18,6 +18,7 @@ add_library(pitracker
     src/yuv420.cpp
     src/h264_nal.cpp
     src/mavlink.cpp
+    src/msp.cpp
 )
 
 target_link_libraries(pitracker PUBLIC Threads::Threads)
