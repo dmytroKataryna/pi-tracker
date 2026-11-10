@@ -76,6 +76,13 @@ std::optional<Frame> Parser::feed(std::uint8_t byte) {
   return std::nullopt;
 }
 
+void Parser::reset() {
+  m_frame = Frame{};
+  m_state = State::Dollar;
+  m_size = 0;
+  m_checksum = 0;
+}
+
 namespace {
 
 // Чи це успішна відповідь на потрібну команду з щонайменше minSize байтами

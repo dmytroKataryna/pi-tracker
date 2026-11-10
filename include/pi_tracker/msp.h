@@ -40,6 +40,9 @@ namespace pi_tracker::msp
         // Подати наступний байт. Повертає кадр, коли він зібраний і контрольна сума збіглася
         std::optional<Frame> feed(std::uint8_t byte);
         std::size_t checksumErrors() const { return m_checksumErrors; }
+        // Забути недозібраний кадр: наступний байт шукається як початок нового кадру. Лічильник помилок
+        // лишається. Викликати, коли відповідь не прийшла вчасно (День 24: зіпсований байт розміру)
+        void reset();
 
     private:
         enum class State

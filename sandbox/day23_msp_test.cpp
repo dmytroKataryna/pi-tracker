@@ -30,7 +30,7 @@ namespace
         try
         {
             test();
-        }
+        }   
         catch (const std::exception &e)
         {
             check(false, std::format("{}: unexpected exception: {}", name, e.what()));
