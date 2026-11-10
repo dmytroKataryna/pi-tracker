@@ -1,0 +1,32 @@
+# CI: на кожен push у master і на кожен pull request GitHub бере чисту машину, збирає переносиму
+# частину pi-tracker (portable/: протоколи, серійний порт, парсери) і запускає модульні тести.
+# Камера, GStreamer і Hailo тут не збираються — на серверах GitHub їх немає
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  test:
+    # TODO 1: matrix — та сама робота на трьох машинах: ubuntu-24.04 (x86), ubuntu-24.04-arm
+    # (arm64, як Pi) і macos-26 (як ваш Mac). Потрібні strategy → matrix → os: [...], а runs-on
+    # бере значення з ${{ matrix.os }}. fail-fast: false — щоб падіння однієї ОС не зупиняло інші
+    runs-on: ubuntu-24.04 # версію зафіксовано, як GoogleTest у CMake: ubuntu-latest колись зміниться сам
+    steps:
+      - uses: actions/checkout@v7 # готовий крок від GitHub: git clone вашого репозиторію
+
+      - name: Configure
+        # COMPILE_WARNING_AS_ERROR: у CI будь-яке попередження — помилка збірки
+        run: cmake -S portable -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_COMPILE_WARNING_AS_ERROR=ON
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  # TODO 2: друга робота sanitizers на ubuntu-24.04 — ті самі три кроки, але Configure збирає
+  # із санітайзерами ASan і UBSan та з перевіркою меж libstdc++ (прапорці — з Дня 23).
+  # -fno-sanitize-recover=all: на першій же помилці UBSan тест падає, а не лише друкує попередження

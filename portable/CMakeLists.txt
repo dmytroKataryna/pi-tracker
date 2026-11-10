@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.25) # 3.25: SYSTEM у FetchContent_Declare
-project(pi_tracker_mac LANGUAGES CXX)
+project(pi_tracker_portable LANGUAGES CXX)
 
-# Переносимі частини pi-tracker, які збираються й на macOS: без libcamera, GStreamer, I2C і Hailo.
-# Основний проєкт (../CMakeLists.txt) як і раніше збирається лише на Pi
+# Переносимі частини pi-tracker, які збираються будь-де: на Pi, на Mac і в CI (GitHub Actions).
+# Без libcamera, GStreamer, I2C і Hailo. Основний проєкт (../CMakeLists.txt) як і раніше збирається лише на Pi
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
