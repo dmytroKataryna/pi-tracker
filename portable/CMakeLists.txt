@@ -14,6 +14,8 @@ add_library(pitracker_portable STATIC
     ../src/mavlink.cpp
     ../src/msp.cpp
     ../src/unique_fd.cpp
+    ../src/length_framing.cpp
+    ../src/tcp_io.cpp
 )
 target_include_directories(pitracker_portable PUBLIC ../include)
 
@@ -33,7 +35,7 @@ FetchContent_Declare(googletest
 FetchContent_MakeAvailable(googletest)
 
 enable_testing()
-add_executable(unit_tests ../tests/msp_test.cpp ../tests/unique_fd_test.cpp ../tests/blocking_queue_test.cpp)
+add_executable(unit_tests ../tests/msp_test.cpp ../tests/unique_fd_test.cpp ../tests/blocking_queue_test.cpp ../tests/length_framing_test.cpp ../tests/tcp_io_test.cpp)
 # gtest_main дає готовий main(), який запускає всі TEST
 target_link_libraries(unit_tests PRIVATE pitracker_portable GTest::gtest_main)
 include(GoogleTest)

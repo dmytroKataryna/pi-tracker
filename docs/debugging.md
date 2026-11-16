@@ -37,6 +37,48 @@
     Обмеження: перевіряється лише код, зібраний із санітайзером. Помилку всередині чужої бібліотеки (libgstapp) ASan може не побачити.
     Ще одна корисна збірка без санітайзерів: -D_GLIBCXX_ASSERTIONS — перевірка меж у std::vector, std::span тощо (як IndexOutOfBounds у Java).
 
+Як локально зібрати й запустити тести так само, як CI: з -Werror і з ASan + UBSan?
+    Кожна конфігурація — у своїй теці build-*, тож перемикатися між ними можна без переконфігурування
+    (build*/ уже в .gitignore). Перший cmake у новій теці завантажує googletest — це нормально.
+
+    1) Попередження = помилки (як job "test" у CI):
+        cmake -S portable -B build-werror -DCMAKE_BUILD_TYPE=Debug -DCMAKE_COMPILE_WARNING_AS_ERROR=ON
+        cmake --build build-werror --parallel
+        ctest --test-dir build-werror --output-on-failure
+
+    2) ASan + UBSan (як job "sanitizers" у CI):
+        Mac (clang + libc++):
+        cmake -S portable -B build-asan -DCMAKE_BUILD_TYPE=Debug -DCMAKE_COMPILE_WARNING_AS_ERROR=ON \
+          -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG"
+        Linux / Pi (GCC + libstdc++) — те саме, але останній прапорець -D_GLIBCXX_ASSERTIONS.
+        cmake --build build-asan --parallel
+        ctest --test-dir build-asan --output-on-failure
+
+    Лише частина тестів (швидше, і видно весь вивід):
+        ./build-asan/unit_tests --gtest_filter='FrameDecoder.*'
+
+    Що означають параметри:
+    -DCMAKE_BUILD_TYPE=Debug — -O0 -g: без оптимізацій і з номерами рядків у звітах санітайзерів і в gdb.
+    -DCMAKE_COMPILE_WARNING_AS_ERROR=ON — CMake додає -Werror: будь-яке попередження зупиняє збірку.
+        Навіщо: -Wconversion, -Wunused-parameter тощо часто вказують на справжню помилку, а CI однаково впаде на них.
+        Наслідок: заглушка з невикористаним параметром із -Werror не скомпілюється.
+    -fsanitize=address (ASan) — вихід за межі масиву, звернення до звільненої пам'яті, подвійне звільнення.
+        Програма ≈2 рази повільніша і їсть більше пам'яті — лише для тестів, не для польоту.
+    -fsanitize=undefined (UBSan) — UB під час виконання: переповнення знакового int, зсув на ≥ ширину типу,
+        невирівняний доступ, розіменування nullptr.
+    -fno-sanitize-recover=all — після першої знайденої помилки зупинити програму (код 134).
+        Без нього UBSan лише друкує "runtime error" і працює далі: процес завершується з кодом 0, тест ЗЕЛЕНИЙ,
+        і помилку видно тільки в лозі. Перевірено: переповнення int без цього прапорця — exit 0, з ним — 134.
+    -fno-omit-frame-pointer — не викидати покажчик кадру стека, щоб стек викликів у звіті був повним і читабельним.
+    -D_GLIBCXX_ASSERTIONS (libstdc++, Linux) і -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG (libc++, Mac) —
+        перевірка меж у самій стандартній бібліотеці: v[i], span::subspan, front() на порожньому тощо → abort з повідомленням.
+        Навіщо поруч з ASan: читання v[5] при size() == 3, але capacity() == 10 — пам'ять «своя», тож ASan на Linux
+        мовчить (exit 0), а _GLIBCXX_ASSERTIONS ловить: "Assertion '__n < this->size()' failed" (перевірено на GCC 13).
+
+    ASan і TSan в одній збірці поєднати не можна. Гонки — окремою збіркою (на Mac; на Pi 5 TSan не працює):
+        cmake -S portable -B build-tsan -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-fsanitize=thread -g -O1"
+        cmake --build build-tsan --parallel && ctest --test-dir build-tsan --output-on-failure
+
 Приклад: помилка, яку видно лише з ASan
     std::vector<int> v(3, 7);
     const int *first = &v[0];
