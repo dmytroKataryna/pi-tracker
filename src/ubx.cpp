@@ -2,10 +2,12 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <limits>
+#include <optional>
 #include <span>
 #include <stdexcept>
+#include <utility>
 #include <vector>
-#include <limits>
 
 namespace pi_tracker {
 
@@ -83,13 +85,98 @@ std::vector<std::uint8_t> encodeFrame(std::uint8_t messageClass,
 
   result.insert(result.end(), payload.begin(), payload.end());
 
-  std::span<const std::uint8_t> sub_span =  std::span{result}.subspan(2);
+  std::span<const std::uint8_t> sub_span = std::span{result}.subspan(2);
   Checksum checkSum = fletcher8(sub_span);
 
   result.push_back(checkSum.a);
   result.push_back(checkSum.b);
 
   return result;
+}
+
+namespace {
+
+void addToChecksum(Checksum &checksum, std::uint8_t byte) {
+  checksum.a = static_cast<std::uint8_t>(checksum.a + byte);
+  checksum.b = static_cast<std::uint8_t>(checksum.b + checksum.a);
+}
+
+} // namespace
+
+Parser::Parser(std::size_t maxPayload) : m_maxPayload(maxPayload) {}
+
+void Parser::reset() {
+  m_state = State::Sync1;
+  m_frame = Frame();
+}
+
+std::optional<Frame> Parser::feed(std::uint8_t byte) {
+  switch (m_state) {
+  case State::Sync1:
+    if (byte == kSync1) {
+      m_frame = Frame();
+      m_checksum = Checksum();
+      m_state = State::Sync2;
+    }
+    break;
+  case State::Sync2:
+    if (byte == kSync2) {
+      m_state = State::Class;
+    } else if (byte == kSync1) {
+      // B5 B5 62: другий 0xB5 теж може бути початком кадру — лишаємось у Sync2
+    } else {
+      m_state = State::Sync1;
+    }
+    break;
+  case State::Class:
+    m_frame.messageClass = byte;
+    addToChecksum(m_checksum, byte);
+    m_state = State::Id;
+    break;
+  case State::Id:
+    m_frame.messageId = byte;
+    addToChecksum(m_checksum, byte);
+    m_state = State::LenLo;
+    break;
+  case State::LenLo:
+    m_sizeLo = byte;
+    addToChecksum(m_checksum, byte);
+    m_state = State::LenHi;
+    break;
+  case State::LenHi:
+    m_size = static_cast<std::uint16_t>(m_sizeLo) |
+             static_cast<std::uint16_t>(byte << 8);
+    addToChecksum(m_checksum, byte);
+    if (m_size > m_maxPayload) {
+      m_lengthErrors += 1;
+      m_state = State::Sync1;
+    } else if (m_size == 0) {
+      m_state = State::Checksum_A; // даних немає — одразу контрольна сума
+    } else {
+      m_frame.payload.reserve(m_size);
+      m_state = State::Payload;
+    }
+    break;
+  case State::Payload:
+    m_frame.payload.push_back(byte);
+    addToChecksum(m_checksum, byte);
+    if (m_frame.payload.size() >= m_size) {
+      m_state = State::Checksum_A;
+    }
+    break;
+  case State::Checksum_A:
+    m_checksumA = byte;
+    m_state = State::Checksum_B;
+    break;
+  case State::Checksum_B:
+    m_state = State::Sync1;
+    if (m_checksumA == m_checksum.a && byte == m_checksum.b) {
+      return std::move(m_frame);
+    }
+    m_checksumErrors += 1;
+    break;
+  }
+  return std::nullopt;
 }
 
 } // namespace ubx
