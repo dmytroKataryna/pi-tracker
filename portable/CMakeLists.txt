@@ -17,6 +17,7 @@ add_library(pitracker_portable STATIC
     ../src/length_framing.cpp
     ../src/tcp_io.cpp
     ../src/ubx.cpp
+    ../src/latency_stats.cpp
 )
 target_include_directories(pitracker_portable PUBLIC ../include)
 
@@ -36,7 +37,7 @@ FetchContent_Declare(googletest
 FetchContent_MakeAvailable(googletest)
 
 enable_testing()
-add_executable(unit_tests ../tests/msp_test.cpp ../tests/unique_fd_test.cpp ../tests/blocking_queue_test.cpp ../tests/length_framing_test.cpp ../tests/tcp_io_test.cpp ../tests/ubx_test.cpp ../tests/ubx_parser_test.cpp)
+add_executable(unit_tests ../tests/msp_test.cpp ../tests/unique_fd_test.cpp ../tests/blocking_queue_test.cpp ../tests/length_framing_test.cpp ../tests/tcp_io_test.cpp ../tests/ubx_test.cpp ../tests/ubx_parser_test.cpp ../tests/latency_stats_test.cpp)
 # gtest_main дає готовий main(), який запускає всі TEST
 target_link_libraries(unit_tests PRIVATE pitracker_portable GTest::gtest_main)
 include(GoogleTest)
