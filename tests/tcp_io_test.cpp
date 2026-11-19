@@ -97,20 +97,22 @@ public:
     action.sa_handler = [](int) {};
     sigemptyset(&action.sa_mask);
     action.sa_flags = 0;
-    ::sigaction(SIGALRM, &action, &m_previous);
+    ::sigaction(SIGALRM, &action, nullptr);
     const itimerval every1ms{{0, 1000}, {0, 1000}};
     ::setitimer(ITIMER_REAL, &every1ms, nullptr);
   }
   ~InterruptEveryMillisecond() {
     const itimerval off{};
     ::setitimer(ITIMER_REAL, &off, nullptr);
-    ::sigaction(SIGALRM, &m_previous, nullptr);
+    // Сигнал, який ядро вже «відправило», може прийти й після вимкнення таймера. Стандартна дія
+    // SIGALRM (SIG_DFL) — завершити процес, тож не повертаємо її, а ігноруємо запізнілі сигнали
+    struct sigaction ignore {};
+    ignore.sa_handler = SIG_IGN;
+    sigemptyset(&ignore.sa_mask);
+    ::sigaction(SIGALRM, &ignore, nullptr);
   }
   InterruptEveryMillisecond(const InterruptEveryMillisecond &) = delete;
   InterruptEveryMillisecond &operator=(const InterruptEveryMillisecond &) = delete;
-
-private:
-  struct sigaction m_previous {};
 };
 
 // Сигнали від таймера мають переривати саме відправника, тож у потоці-отримувачі їх блокуємо
