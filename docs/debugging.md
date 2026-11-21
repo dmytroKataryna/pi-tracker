@@ -190,3 +190,110 @@
     Три стеки — кожен читати до першого рядка свого коду.
     Виправлення: брати посилання вже після всіх push_back; зберігати індекс; скопіювати: Frame first = frames[0];
     reserve наперед — лише коли кількість точно відома, і це крихко: хтось потім додасть ще один push_back.
+
+Методичка: core dump на Pi — увімкнути, зібрати, дістати, відкрити
+(Перевірено на Pi 5: Debian, gdb 16.3, g++ 14; листопад 2026)
+
+Що таке core dump і коли він потрібен?
+    Знімок пам'яті процесу в момент падіння: стеки всіх потоків, значення змінних. Пише його ядро, на пристрої
+    не потрібен ні gdb, ні інший налагоджувач. Відповідає на питання ЩО зламалося (стек, nullptr, номер кадру).
+    Історії в ньому немає: локальних змінних функцій, які вже повернулися, не видно, точки зупинки й кроки не працюють.
+    ЧОМУ так сталося — перевіряють потім живим запуском (точка зупинки, ASan/TSan, юніт-тест).
+    Android-аналогія: tombstone / heap dump.
+
+1) Зібрати з налагоджувальною інформацією
+    g++ -std=c++20 -g -O0 app.cpp -o app      — для навчання: усі змінні видно
+    g++ -std=c++20 -g -O2 app.cpp -o app      — як для польоту (CMake: -DCMAKE_BUILD_TYPE=RelWithDebInfo)
+    Зберегти САМЕ ЦЕЙ бінарник поруч із версією коду. Відбиток збірки:
+        readelf -n app | grep "Build ID"
+    Core від однієї збірки з іншим бінарником не читається правильно (gdb попереджає "core file may not match").
+
+2) Перевірити й увімкнути core dump
+    ulimit -c                                  — 0 = вимкнено (на Pi так за замовчуванням)
+    ulimit -c unlimited                        — увімкнути. Діє лише на ЦЮ оболонку і програми, запущені з неї;
+                                                 нова SSH-сесія — знову 0
+    cat /proc/sys/kernel/core_pattern          — куди пишеться файл. На Pi: "core" → у поточну теку процесу
+    cat /proc/sys/kernel/core_uses_pid         — 1 → назва core.<PID> (наприклад core.2510)
+    Тека має бути доступна процесу на запис, інакше core не з'явиться.
+    Для systemd-сервісу (на дроні) ulimit із термінала не діє — у юніті:
+        [Service]
+        LimitCORE=infinity
+        WorkingDirectory=/var/lib/sensord      ← тека з правом запису, туди й ляже core
+
+3) Падіння
+    ./app; echo "exit=$?"
+        Segmentation fault (core dumped)       ← "(core dumped)" = файл записано
+        exit=139                               ← 128 + 11, SIGSEGV
+    Без ulimit буде просто "Segmentation fault" і жодного файлу.
+    SIGKILL (OOM killer, kill -9) core НЕ пише — його не перехопити.
+
+4) Дістати з пристрою (на Mac)
+    scp pi5:coredemo/app pi5:coredemo/core.2510 ~/pi-tracker/build/coredemo/
+    Розмір core ≈ пам'ять процесу: тут 800 КБ, у програми з кадрами камери — сотні МБ.
+    У core може бути все, що було в пам'яті (кадри, ключі) — нікому не пересилати.
+
+5) Відкрити
+    На Pi:   gdb ./app core.2510               (gdb -tui ./app core.2510 — зверху ще й код)
+    На Mac:  lldb ./app -c core.2510           (lldb читає Linux-core, пароль не потрібен)
+    VS Code на Pi: Run and Debug → "core dump (gdb)" (~/pi-tracker/.vscode/launch.json: program + coreDumpPath)
+    Команди gdb:
+        bt                    — стек; читати згори до першої своєї функції
+        frame 1  (up/down)    — перейти в інший кадр
+        info args / info locals
+        print *this, print m_detector, print frame.number
+        list                  — код навколо поточного рядка
+        quit
+    Вправа 3 (sandbox/debug/ex3_model_reload.cpp), -O0:
+        #0  Detector::detect (this=0x0, frame=...) at ex3_model_reload.cpp:21
+        #1  Pipeline::onFrame (this=0x7ffffb985bc8, frame=...) at ex3_model_reload.cpp:40
+        (gdb) frame 1
+        (gdb) print *this     → {m_detector = std::unique_ptr<Detector> = {get() = 0x0}, m_targets = 99}
+        (gdb) print frame.number → 100
+
+    Пастка -O2: частина змінних "<optimized out>", а значення в пам'яті можуть бути ЗАСТАРІЛИМИ — компілятор тримав
+    їх у регістрах. Та сама вправа з -O2 на Pi: print *this показав get() = 0x7ffff8a08948 і m_targets = 73728 (сміття),
+    хоча насправді там nullptr і 99. Надійніше: this=0x0 у кадрі #0 і адреса падіння. Сумнівно — перезібрати з -O0.
+
+6) Перевірити гіпотезу живим запуском
+    gdb ./app → break Pipeline::reloadModel → run → next → print candidate
+    VS Code: "ex3 live (gdb)", червона точка ліворуч від рядка, F5.
+    Клавіші VS Code: F10 — крок (next), F11 — зайти у функцію (step), Shift+F11 — вийти (finish), F5 — далі (continue).
+
+7) Прибрати
+    rm core.*
+
+Повторення: тема 6 (листопад 2026)
+
+Що тут не так? Що скаже ASan? Як виправити?
+    std::span<const std::uint8_t> payload = decoder.lastPayload(); // span на внутрішній буфер decoder
+    decoder.feed(nextChunk);                                       // додає байти в той самий буфер
+    sendToGroundStation(payload);
+    span, як і string_view, нічим не володіє. feed додає байти у vector; якщо не вистачає capacity, vector виділяє
+    новий блок, переносить байти і ЗВІЛЬНЯЄ старий. payload далі вказує в звільнений блок.
+    ASan: НЕ "Segmentation fault", а "heap-use-after-free" з трьома стеками: читання (sendToGroundStation),
+    звільнення (feed → vector::insert), виділення. Завершення від ASan: Mac — abort (134), Linux — exit 1.
+    Звичайна збірка найчастіше НЕ падає, а мовчки відправляє сміття (як у вправі 1: BAD, exit 0).
+    Виправлення: відправити ДО feed; або скопіювати перед feed:
+        std::vector<std::uint8_t> copy(payload.begin(), payload.end());
+    або lastPayload() повертає власну копію. Якщо лишаємо span — у коментарі: «дійсний до наступного feed()».
+
+std::atomic<int> framesTotal, framesDropped; камера збільшує обидва, телеметрія рахує framesDropped / framesTotal.
+Чи скаже щось TSan? Чи можна довіряти результату?
+    TSan МОВЧИТЬ: кожне звернення атомарне, тож data race формально немає.
+    Але довіряти не можна — це race condition (логічна гонка): між читанням framesDropped і framesTotal камера
+    встигає збільшити лічильник, частка рахується з різних моментів. «TSan чистий» ≠ «код правильний».
+    Для кількох значень, що мають бути узгоджені, — один м'ютекс на обидва (вправа 2, sandbox/debug/ex2_latest_position.cpp:
+    atomic на кожному полі — TSan чистий, 1 269 565 змішаних позицій з 2 млн).
+    Ще одна помилка без жодних інструментів: int / int — цілочисельне ділення. dropped < total → завжди 0;
+    на старті total == 0 → ділення на нуль. Правильно: total == 0 ? 0.0 : static_cast<double>(dropped) / total.
+
+Сервіс sensord зник у польоті. У журналі "Main process exited, code=killed, status=9/KILL", "core dumped" немає.
+Що сталося, де підтвердити, чи можна було отримати core?
+    status=9/KILL — процес убив SIGKILL (сигнал 9).
+    Найімовірніше — OOM killer: скінчилася пам'ять (витік, черга без обмеження). Підтвердити в журналі ядра:
+        journalctl -k   або   dmesg   → "Out of memory: Killed process 1234 (sensord)"
+    Рідше: watchdog / тайм-аут зупинки systemd, чийсь kill -9.
+    Core НЕ буде за жодних налаштувань: SIGKILL не перехопити, ядро core для нього не пише.
+    Core вмикається не «в білді», а під час ЗАПУСКУ: LimitCORE=infinity у юніті або ulimit -c unlimited.
+    -g у збірці лише робить core читабельним (імена функцій, рядки, змінні).
+    SIGSEGV (139) → core є (якщо ввімкнено); SIGKILL (137) → core немає, дивитися журнал ядра.
