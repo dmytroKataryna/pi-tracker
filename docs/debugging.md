@@ -262,6 +262,60 @@
 7) Прибрати
     rm core.*
 
+Методичка: core dump з release-збірки (дрон) — символи окремим файлом
+(Перевірено на Pi 5: g++ 14, gdb 16.3; і lldb на Mac; листопад 2026)
+
+Чи можна зняти core dump зі звичайної release-збірки?
+    Так. Core пише ядро, від збірки це не залежить: потрібні лише LimitCORE=infinity (або ulimit -c unlimited)
+    і тека з правом запису (методичка вище, крок 2). Від збірки залежить інше — чи вдасться core ПРОЧИТАТИ.
+    Release без -g і без символів (strip), gdb:
+        #0  0x00005555d60b0930 in ?? ()
+        #1  0x00007fff1b13225c in ?? () from /lib/aarch64-linux-gnu/libc.so.6
+    lldb: app`___lldb_unnamed_symbol_940 + 124. Core є, а стек нічого не каже.
+
+Як правильно: збирати з -g, на дрон — без символів, символи — в архів на землі
+    Android-аналогія: ProGuard mapping.txt / native symbols для Crashlytics.
+        g++ -std=c++20 -O2 -g app.cpp -o app
+        objcopy --only-keep-debug app app.debug      — витягти налагоджувальну інформацію в окремий файл
+        strip --strip-debug --strip-unneeded app     — прибрати її з бінарника
+        objcopy --add-gnu-debuglink=app.debug app    — вписати в app ім'я файлу символів
+    Вправа 3: app з -g 107 КБ → app 66 КБ (на дрон) + app.debug 46 КБ (в архів).
+    -g НЕ змінює машинний код: секція .text з -g і без нього однакова байт у байт (cmp на Pi і на buildbox).
+    Тобто на дроні той самий реліз, що й без -g, просто символи лежать окремо.
+    Build ID у app і app.debug однаковий — за ним їх зіставляють:
+        readelf -n app | grep "Build ID"
+    (readelf на app.debug ще пише "Unable to find program interpreter name" — нормально, коду там немає.)
+    app.debug архівувати для КОЖНОГО релізу разом із комітом і Build ID — як mapping.txt.
+
+Після посадки: відкрити core з символами
+    scp drone:/var/lib/sensord/core.1728 .          app і app.debug — з архіву цієї версії
+    Варіант 1:
+        gdb ./app core.1728
+        (gdb) symbol-file app.debug
+        (gdb) bt
+    Варіант 2: покласти app.debug поруч з app — gdb знайде його сам через debuglink:
+        gdb ./app core.1728
+    lldb на Mac: lldb ./app -c core.1728, далі target symbols add app.debug
+    Результат на Pi (-O2):
+        #0  Detector::detect (this=0x0, frame=...) at ex3_model_reload.cpp:21
+        #1  Pipeline::onFrame (this=0x7fffe7a9e9f0, frame=...) at ex3_model_reload.cpp:40
+        #2  main () at ex3_model_reload.cpp:63
+    Пастка -O2 та сама: frame 1 → print *this дав get() = 0x7fffe7a9eb78, m_targets = 73728 (сміття),
+    print frame.number → "value has been optimized out". Вірити стеку й this=0x0, а не значенням змінних.
+
+А якщо app.debug не зберегли?
+    Зібрати ТОЙ САМИЙ коміт тим самим компілятором і з тими самими прапорцями, додати -g, зробити app.debug.
+    На Pi спрацювало: реліз без -g + символи з окремої збірки з -g → стек з іменами й рядками.
+    Але Build ID уже інший (99034af8… проти 65ef0ab9…), і gdb із symbol-file про це НЕ попереджає.
+    Інша версія компілятора, інші прапорці чи інший коміт — і gdb мовчки покаже не ті функції й рядки.
+    Тому app.debug зберігають одразу, під час збірки релізу.
+
+CMake
+    Release        = -O3 -DNDEBUG        без -g
+    RelWithDebInfo = -O2 -g -DNDEBUG     інша оптимізація, ніж у Release
+    Щоб символи були саме для того коду, що летить: або літати на RelWithDebInfo, або додати -g до Release
+    (CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG -g"). Після збірки — objcopy / strip / objcopy, як вище.
+
 Повторення: тема 6 (листопад 2026)
 
 Що тут не так? Що скаже ASan? Як виправити?
